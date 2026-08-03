@@ -2,8 +2,8 @@
 §15 AI Review Summary — an actual LangGraph pipeline (not just a single LLM
 call): a theme-extraction node feeds a synthesis node. Splitting the two
 steps keeps each prompt focused and makes the pipeline easy to extend later
-(e.g. adding a "flag needs-human-review" branch) without touching either
-existing node.
+
+
 
 """
 import json
