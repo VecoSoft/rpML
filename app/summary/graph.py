@@ -5,9 +5,6 @@ steps keeps each prompt focused and makes the pipeline easy to extend later
 (e.g. adding a "flag needs-human-review" branch) without touching either
 existing node.
 
-The caller (Java side) is responsible for only invoking this once every 10
-new reviews (spec §15's cost-control trigger) and for caching the result —
-this module has no notion of "since last generation" itself.
 """
 import json
 from typing import List, TypedDict
