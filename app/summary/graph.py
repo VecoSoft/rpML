@@ -32,8 +32,11 @@ def _llm() -> ChatGoogleGenerativeAI:
         google_api_key=settings.gemini_api_key,
         # Generous headroom: current gemini-flash-latest spends part of this
         # budget on internal reasoning before the visible JSON/text output,
-        # so a Claude-sized 300-token budget was truncating responses.
-        max_output_tokens=1024,
+        # and that reasoning cost grows with input size — 1024 was already
+        # observed truncating the theme-extraction JSON (finish_reason
+        # MAX_TOKENS) on a ~20-review batch, well under the 200-review cap
+        # this pipeline is asked to handle.
+        max_output_tokens=4096,
     )
 
 
