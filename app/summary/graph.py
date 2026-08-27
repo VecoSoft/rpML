@@ -62,7 +62,10 @@ def _extract_themes(state: SummaryState) -> SummaryState:
 
 def _synthesize_summary(state: SummaryState) -> SummaryState:
     if not state["themes"]:
-        return {**state, "summary": "Not enough review content yet to generate a summary."}
+        # Empty, not a placeholder sentence — the backend must treat this as
+        # "nothing to save" and leave the cached row untouched, rather than
+        # persisting human-readable filler text as if it were a real summary.
+        return {**state, "summary": ""}
 
     themes_block = "\n".join(f"- {t}" for t in state["themes"])
     response = _llm().invoke(SYNTHESIS_PROMPT.format(themes_block=themes_block))
