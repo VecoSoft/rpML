@@ -52,3 +52,15 @@ Response: the generated summary text.
   results (notifying owners, moving reviews to a queue, recomputing rating
   aggregates) — that orchestration stays on the Java side, which already owns
   the transactional writes to `review`, `fake_review_signal`, and `business`.
+
+## Production (Docker)
+
+Built and run on the droplet by backendR's `deploy/` scripts (see `deploy/README.md` there). It is
+not published to the internet; only the API reaches it, at `http://ml:8081`.
+
+- `Dockerfile`: multi-stage build (virtualenv in the build stage), CPU-only PyTorch, non-root user,
+  gunicorn with one uvicorn worker, healthcheck on `GET /health`.
+- `HF_HOME=/models` is a Docker volume, so the embedding model is downloaded once.
+- Memory: the container is limited to 768 MB by default. `paraphrase-multilingual-mpnet-base-v2`
+  needs about 1.5 GB, so production sets `EMBEDDING_MODEL=paraphrase-multilingual-MiniLM-L12-v2`
+  (also multilingual, Bangla/Banglish included). Raise `ML_MEM_LIMIT` to use the larger model.
